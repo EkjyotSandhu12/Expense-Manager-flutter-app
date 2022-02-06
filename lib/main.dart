@@ -22,8 +22,12 @@ class App extends StatelessWidget {
           // primary swatch is based on single colors with multiple shades
           fontFamily: 'Schyler',
           brightness: Brightness.light,
-          textTheme: TextTheme(headline6: TextStyle(fontFamily: 'Roboto'),
-          bodyText1: TextStyle(fontSize: 15)),
+          textTheme: TextTheme(
+            headline6: TextStyle(fontFamily: 'Roboto',color: Colors.red),
+            bodyText1: TextStyle(fontSize: 15),
+            button: TextStyle(color: Colors.white),
+          ),
+          buttonTheme: ButtonThemeData(buttonColor: Colors.purple),
           appBarTheme: const AppBarTheme(
               titleTextStyle: TextStyle(
                   fontFamily: 'Roboto',
@@ -43,9 +47,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void AddTransactions(String title, double amount) {
+
+  void AddTransactions(String title, double amount, DateTime selectedDate) {
     final Tx = TransactionData(
-        id: 1, title: title, amount: amount, date: DateTime.now());
+        id: 1, title: title, amount: amount, date: selectedDate);
 
     setState(() {
       transactions.add(Tx);
@@ -61,10 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<TransactionData> get lastweek {
-    return transactions.where(
-            (tx) => tx.date.isAfter(DateTime.now().subtract(Duration(days: 7)))) // condition
+    return transactions
+        .where((tx) => tx.date
+            .isAfter(DateTime.now().subtract(Duration(days: 7)))) // condition
         .toList();
   }
+
   //listname.where(index){listname[index]}  this function returns a newly created list that has to fullfill a requirement.
 
   @override

@@ -9,28 +9,32 @@ class Chart extends StatelessWidget {
   Chart(this.recentTransaction);
 
   List<Map<String, Object>> get WeekTransactionsList {
-    return List.generate(7, (index) {
-      // this will generate the list of last 7 days with specific Day and money spent on that Day.
+    return List.generate(
+      7,
+      (index) {
+        // this will generate the list of last 7 days with specific Day and money spent on that Day.
 
-      DateTime weekDay = DateTime.now().subtract(Duration(
-          days: index)); // accessing last 7 days one by one, in every iteration
-      double totalValue = 0;
+        DateTime weekDay = DateTime.now().subtract(Duration(
+            days:
+                index)); // accessing last 7 days one by one, in every iteration
+        double totalValue = 0;
 
-      for (int i = 0; i < recentTransaction.length; i++) {
-        if (recentTransaction[i].date.day == weekDay.day &&
-            recentTransaction[i].date.month == weekDay.month &&
-            recentTransaction[i].date.year == weekDay.year) {
-          totalValue += recentTransaction[i]
-              .amount; //gathering all the amount that we spent on that day (weekDay)
+        for (int i = 0; i < recentTransaction.length; i++) {
+          if (recentTransaction[i].date.day == weekDay.day &&
+              recentTransaction[i].date.month == weekDay.month &&
+              recentTransaction[i].date.year == weekDay.year) {
+            totalValue += recentTransaction[i]
+                .amount; //gathering all the amount that we spent on that day (weekDay)
+          }
         }
-      }
 
-      return {
-        'day': DateFormat.E().format(weekDay),
-        // E returns weekday name on that day
-        'value': totalValue
-      }; // 1 day of last 7 day
-    });
+        return {
+          'day': DateFormat.E().format(weekDay),
+          // E returns weekday name on that day
+          'value': totalValue
+        }; // 1 day of last 7 day
+      },
+    ).reversed.toList(); // reverses the list
   }
 
   double get totalSpendingLastWeek {
@@ -55,13 +59,12 @@ class Chart extends StatelessWidget {
               (e) {
                 return Flexible(
                   child: ChartBar(
-                        e['day'].toString(),
-                        (e['value'] as double),
-                        e['value'] as double <= 0
-                            ? 0
-                            : (e['value'] as double) / totalSpendingLastWeek),
-                );//A widget that controls how a child of a Row, Column takes space.
-
+                      e['day'].toString(),
+                      (e['value'] as double),
+                      e['value'] as double <= 0
+                          ? 0
+                          : (e['value'] as double) / totalSpendingLastWeek),
+                ); //A widget that controls how a child of a Row, Column takes space.
               },
             ),
           ],
