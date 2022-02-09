@@ -61,44 +61,47 @@ class _TransactionAddState extends State<TransactionAdd> {
     }
 
     return Card(
-      child: Container(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              controller: name,
-              decoration:
-                  const InputDecoration(labelText: 'Name of the Product'),
-              keyboardType: TextInputType.text,
-              onSubmitted: (_) => TransactionFilter(),
-            ),
-            TextField(
-              controller: amount,
-              decoration: const InputDecoration(labelText: 'Enter Cost'),
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => TransactionFilter(),
-            ),
-            Padding(padding: EdgeInsets.all(10)),
-            Row(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(DateFormat('yMMMEd').format((selectedDate))),
-                Padding(
-                  padding: EdgeInsets.all(7),
+                TextField(
+                  controller: name,
+                  decoration:
+                      const InputDecoration(labelText: 'Name of the Product'),
+                  keyboardType: TextInputType.text,
+                  onSubmitted: (_) => TransactionFilter(),
                 ),
-              Expanded(child: Container(alignment: Alignment.centerRight ,child: TextButton(onPressed: DatePick, child: Text('Choose Date')))),
+                TextField(
+                  controller: amount,
+                  decoration: const InputDecoration(labelText: 'Enter Cost'),
+                  keyboardType: TextInputType.number,
+                  onSubmitted: (_) => TransactionFilter(),
+                ),
+                Padding(padding: EdgeInsets.all(10)),
+                Row(
+                  children: [
+                    Text(DateFormat('yMMMEd').format((selectedDate))),
+                    Padding(
+                      padding: EdgeInsets.all(7),
+                    ),
+                  Expanded(child: Container(alignment: Alignment.centerRight ,child: TextButton(onPressed: DatePick, child: Text('Choose Date')))),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () => {TransactionFilter()},
+                  child: Text(
+                    'ADD',
+                    style: Theme.of(context).textTheme.button,
+                  ),
+                ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () => {TransactionFilter()},
-              child: Text(
-                'ADD',
-                style: Theme.of(context).textTheme.button,
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+
     );
   }
 }

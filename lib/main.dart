@@ -1,16 +1,26 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import './Model/TransactionData.dart';
 import './Widget/TransactionAdd.dart';
 import './Widget/TransactionList.dart';
 import 'Widget/Chart.dart';
 
+//system chrome allows you to set some system wide settings for your app
+
 void main() {
+  /* WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);*/
   runApp(App());
 }
 
 final List<TransactionData> transactions = [];
+bool showChart = true;
 
 class App extends StatelessWidget {
   @override
@@ -23,7 +33,7 @@ class App extends StatelessWidget {
           fontFamily: 'Schyler',
           brightness: Brightness.light,
           textTheme: TextTheme(
-            headline6: TextStyle(fontFamily: 'Roboto',color: Colors.red),
+            headline6: TextStyle(fontFamily: 'Roboto', color: Colors.red),
             bodyText1: TextStyle(fontSize: 15),
             button: TextStyle(color: Colors.white),
           ),
@@ -47,22 +57,42 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   void AddTransactions(String title, double amount, DateTime selectedDate) {
     final Tx = TransactionData(
-        id: 1, title: title, amount: amount, date: selectedDate);
-
+        id: title +
+            selectedDate.toString() +
+            amount.toString() +
+            new Random(10000000).toString(),
+        title: title,
+        amount: amount,
+        date: selectedDate);
     setState(() {
       transactions.add(Tx);
     });
   }
 
+  void deleteTransactions(String id) {
+    setState(() {
+      transactions.removeWhere((element) => element.id == id);
+    });
+  }
+
   void AddTransactionModalPage(BuildContext context) {
+
     showModalBottomSheet(
-        context: context,
-        builder: (ctx) {
-          return TransactionAdd(AddTransactions);
-        });
+      isScrollControlled: true, //scrolling the entire sheet //https://api.flutter.dev/flutter/widgets/DraggableScrollableSheet-class.html
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      context: context,
+      builder: (_) {
+        return Container(
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: TransactionAdd(AddTransactions),
+        );
+      },
+    );
   }
 
   List<TransactionData> get lastweek {
@@ -76,25 +106,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Your Expense Controller'),
         actions: [
-          IconButton(
-              onPressed: () {
-                AddTransactionModalPage(context);
-              },
-              icon: Icon(Icons.add)),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: FittedBox(
+              child: Column(children: [
+                Switch(
+                    value: showChart,
+                    onChanged: (value) {
+                      setState(() {
+                        showChart = value;
+                      });
+                    }),
+                Text('Show Chart')
+              ]),
+            ),
+          ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Chart(lastweek),
-            TransactionList(transactions),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if (showChart) Chart(lastweek),
+          Flexible(
+            child: TransactionList(transactions, deleteTransactions),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
