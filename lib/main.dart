@@ -27,23 +27,24 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          // primaryColor: Colors.blueGrey, // primary color is based on one single color
-          primarySwatch: Colors.blueGrey,
-          // primary swatch is based on single colors with multiple shades
-          fontFamily: 'Schyler',
-          brightness: Brightness.light,
-          textTheme: TextTheme(
-            headline6: TextStyle(fontFamily: 'Roboto', color: Colors.red),
-            bodyText1: TextStyle(fontSize: 15),
-            button: TextStyle(color: Colors.white),
-          ),
-          buttonTheme: ButtonThemeData(buttonColor: Colors.purple),
-          appBarTheme: const AppBarTheme(
-              titleTextStyle: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20) //Font weight is 700 for bold
-              )),
+        // primaryColor: Colors.blueGrey, // primary color is based on one single color
+        primarySwatch: Colors.lightBlue,
+        // primary swatch is based on single colors with multiple shades
+        fontFamily: 'Schyler',
+        brightness: Brightness.light,
+        textTheme: TextTheme(
+          headline6: TextStyle(fontFamily: 'Roboto', color: Colors.red),
+          bodyText1: TextStyle(fontSize: 15),
+          button: TextStyle(color: Colors.white),
+        ),
+        buttonTheme: ButtonThemeData(buttonColor: Colors.purple),
+        appBarTheme: const AppBarTheme(
+            titleTextStyle: TextStyle(
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w700,
+                fontSize: 20) //Font weight is 700 for bold
+            ),
+      ),
       debugShowCheckedModeBanner: false,
       title: 'ExpenseManager',
       home: MyHomePage(),
@@ -78,17 +79,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void AddTransactionModalPage(BuildContext context) {
-
     showModalBottomSheet(
-      isScrollControlled: true, //scrolling the entire sheet //https://api.flutter.dev/flutter/widgets/DraggableScrollableSheet-class.html
+      isScrollControlled: true,
+      //scrolling the entire sheet //https://api.flutter.dev/flutter/widgets/DraggableScrollableSheet-class.html
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
       context: context,
       builder: (_) {
         return Container(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom),
           child: TransactionAdd(AddTransactions),
         );
       },
